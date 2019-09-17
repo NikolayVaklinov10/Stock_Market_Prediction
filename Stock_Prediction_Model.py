@@ -36,6 +36,16 @@ def calculate_price_differences(final_prices, opening_prices):
     return price_differences
 
 
+def calculate_accuracy(expected_values, actual_values):
+    num_correct = 0
+    for a_i in range(len(actual_values)):
+        if actual_values[a_i] < 0 < expected_values[a_i]:
+            num_correct += 1
+        elif actual_values[a_i] > 0 > expected_values[a_i]:
+            num_correct += 1
+    return (num_correct / len(actual_values)) * 100
+
+
 # Training data sets
 train_final_prices, train_opening_prices, train_volumes = load_stock_data(current_train_data, NUM_TRAIN_DATA_POINTS)
 train_price_differences = calculate_price_differences(train_final_prices, train_opening_prices)
@@ -64,13 +74,18 @@ for _ in range(NUM_EPOCHS):
     session.run(optimizer, feed_dict={x:train_volumes ,y_predicted:train_price_differences})
 
 
+results = session.run(y, feed_dict={x: test_volumes})
+accuracy = calculate_accuracy(test_price_differences, results)
+print("Accuracy of model: {0:.2f}%".format(accuracy))
+
+
 # Plotting purposes only, not necessary
-plt.figure(1)
-plt.plot(train_volumes, train_price_differences, 'bo')
-plt.title('Price Differences for given volumes for the Past Year')
-plt.xlabel('Volumes')
-plt.ylabel('Price differences')
-plt.show()
+# plt.figure(1)
+# plt.plot(train_volumes, train_price_differences, 'bo')
+# plt.title('Price Differences for given volumes for the Past Year')
+# plt.xlabel('Volumes')
+# plt.ylabel('Price differences')
+# plt.show()
 
 
 
