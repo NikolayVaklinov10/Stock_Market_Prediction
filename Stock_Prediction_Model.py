@@ -25,7 +25,16 @@ def load_stock_data(stock_name, num_data_points):
     return final_prices, opening_prices, volumes
 
 
-print(load_stock_data(current_test_data, NUM_TEST_DATA_POINTS))
+def calculate_price_differences(final_prices, opening_prices):
+    price_differences = []
+    for d_i in range(len(final_prices) - 1):
+        price_difference = opening_prices[d_i + 1] - final_prices[d_i]
+        price_differences.append(price_difference)
+    return price_differences
+
+
+finals, openings, volumes = load_stock_data(current_test_data, NUM_TEST_DATA_POINTS)
+print(calculate_price_differences(finals, openings))
 
 
 
