@@ -13,6 +13,8 @@ current_test_data = GOLD_TEST_DATA
 NUM_TRAIN_DATA_POINTS = 266
 NUM_TEST_DATA_POINTS = 22
 
+LEARNING_RATE = 0.1
+
 
 def load_stock_data(stock_name, num_data_points):
     data = pd.read_csv(stock_name,
@@ -33,14 +35,15 @@ def calculate_price_differences(final_prices, opening_prices):
     return price_differences
 
 
-finals, openings, volumes = load_stock_data(current_test_data, NUM_TEST_DATA_POINTS)
-print(calculate_price_differences(finals, openings))
+# y = Wx + b
+x = tf.placeholder(tf.float32, name='')
+W = tf.Variable([.1], name='W')
+b = tf.Variable([.1], name='b')
+y = W * x + b
+y_predicted = tf.placeholder(tf.float32, name='y_predicted')
 
-
-
-
-
-
+loss = tf.reduce_sum(tf.square(y - y_predicted))
+optimizer = tf.train.AdamOptimizer(LEARNING_RATE).minimize(loss)
 
 
 
